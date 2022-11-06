@@ -1,4 +1,5 @@
 import React from 'react';
+import 'bootswatch/dist/darkly/bootstrap.css';
 import './RegisterClient.css';
 
 export default class RegisterClient extends React.Component {
@@ -26,54 +27,54 @@ export default class RegisterClient extends React.Component {
                     <h1 className='Register-title'>Cadastrar Cliente</h1>
 
                     <form className='inputField-container'>
-                        <div className='fieldWithLabel'>
-                            <label>CPF: </label>
-                            <input
-                                type="text"
-                                name="CPF"
-                                value={this.state.cpf}
-                                onChange={(e) => { this.setState({ cpf: e.target.value }) }}
-                            />
-                        </div>
-                        <div className='fieldWithLabel'>
-                            <label>Nome: </label>
-                            <input
-                                type="text"
-                                name="Name"
-                                value={this.state.name}
-                                onChange={(e) => { this.setState({ name: e.target.value }) }}
-                            />
-                        </div>
-                        <div className='fieldWithLabel'>
-                            <label>Email: </label>
-                            <input
-                                type="text"
-                                name="Email"
-                                value={this.state.email}
-                                onChange={(e) => { this.setState({ email: e.target.value }) }}
-                            />
-                        </div>
-                        <div className='fieldWithLabel'>
-                            <label>Telefone: </label>
-                            <input
-                                type="text"
-                                name="Phone"
-                                value={this.state.phone}
-                                onChange={(e) => { this.setState({ phone: e.target.value }) }}
-                            />
-                        </div>
-                        <div className='fieldWithLabel'>
-                            <label>Idade: </label>
-                            <input
-                                type='number'
-                                name="Age"
-                                value={this.state.age}
-                                onChange={(e) => { this.setState({ age: e.target.value }) }}
-                            />
-                        </div>
+                        <input
+                            style={{ marginBottom: '5px' }}
+                            type="text"
+                            className="form-control"
+                            placeholder="CPF"
+                            id="inputDefault"
+                            onChange={(e) => { this.setState({ cpf: e.target.value }) }}
+                        />
 
-                        <button type='submit' onClick={this.onSubmit}>Enviar</button>
+                        <input
+                            style={{ marginBottom: '5px' }}
+                            type="text"
+                            className="form-control"
+                            placeholder="Nome"
+                            id="inputDefault"
+                            onChange={(e) => { this.setState({ name: e.target.value }) }}
+                        />
+
+                        <input
+                            style={{ marginBottom: '5px' }}
+                            type="text"
+                            className="form-control"
+                            placeholder="Email"
+                            id="inputDefault"
+                            onChange={(e) => { this.setState({ email: e.target.value }) }}
+                        />
+
+                        <input
+                            style={{ marginBottom: '5px' }}
+                            type="text"
+                            className="form-control"
+                            placeholder="Phone"
+                            id="inputDefault"
+                            onChange={(e) => { this.setState({ phone: e.target.value }) }}
+                        />
+
+
+                        <input
+                            style={{ marginBottom: '5px' }}
+                            type="number"
+                            className="form-control"
+                            placeholder='0'
+                            id="inputDefault"
+                            onChange={(e) => { this.setState({ age: e.target.value }) }}
+                        />
+
                     </form>
+                    <button type='submit' className="btn btn-success" onClick={this.onSubmit}>Enviar</button>
                 </header>
             </div>
         );

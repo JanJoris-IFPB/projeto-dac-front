@@ -1,0 +1,9 @@
+.optionMenu {
+    display: flex;
+    flex-direction: column;
+}
+
+.buttonMenu {
+    display: flex;
+    justify-content: space-between;
+}
