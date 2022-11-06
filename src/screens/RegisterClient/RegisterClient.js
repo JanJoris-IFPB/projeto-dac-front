@@ -1,4 +1,6 @@
 import React from 'react';
+import axios from 'axios';
+import { serverURL } from '../../utils/Constants'
 import 'bootswatch/dist/darkly/bootstrap.css';
 import './RegisterClient.css';
 
@@ -13,11 +15,22 @@ export default class RegisterClient extends React.Component {
     }
 
     onSubmit = () => {
-        alert(this.state.cpf);
-        alert(this.state.name);
-        alert(this.state.email);
-        alert(this.state.phone);
-        alert(this.state.age);
+        axios.post(`${serverURL}/api/person`, {
+            cpf: this.state.cpf,
+            name: this.state.name,
+            email: this.state.email,
+            phone: this.state.phone,
+            age: this.state.age
+        }, {
+            validateStatus: (status) => {
+                return status === 201; // Created
+            }
+        }).then(response => {
+            const person = response.data;
+            alert(`${person.name} com CPF ${person.cpf} criado(a) com sucesso`)
+        }).catch(error => {
+            console.error(error.response);
+        });
     }
 
     render() {

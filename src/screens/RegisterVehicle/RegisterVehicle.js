@@ -1,4 +1,6 @@
 import React from 'react';
+import axios from 'axios';
+import { serverURL } from '../../utils/Constants'
 import 'bootswatch/dist/darkly/bootstrap.css';
 import './RegisterVehicle.css';
 
@@ -12,10 +14,21 @@ export default class RegisterVehicle extends React.Component {
     }
 
     onSubmit = () => {
-        alert(this.state.plate);
-        alert(this.state.make);
-        alert(this.state.model);
-        alert(this.state.color);
+        axios.post(`${serverURL}/api/vehicle`, {
+            plate: this.state.plate,
+            make: this.state.make,
+            model: this.state.model,
+            color: this.state.color
+        }, {
+            validateStatus: (status) => {
+                return status === 201; // Created
+            }
+        }).then(response => {
+            const vehicle = response.data;
+            alert(`${vehicle.make} ${vehicle.model} com placa ${vehicle.plate} cadastrado com sucesso`)
+        }).catch(error => {
+            console.error(error.response);
+        });
     }
 
     render() {
@@ -60,9 +73,8 @@ export default class RegisterVehicle extends React.Component {
                             id="inputDefault"
                             onChange={(e) => { this.setState({ color: e.target.value }) }}
                         />
-
-                        <button type='submit' className="btn btn-success" onClick={this.onSubmit}>Enviar</button>
                     </form>
+                    <button type='submit' className="btn btn-success" onClick={this.onSubmit}>Enviar</button>
                 </header>
             </div>
         );
