@@ -4,8 +4,9 @@ import { serverURL } from '../../utils/Constants'
 import ClientTable from '../../components/ClientTable/ClientTable';
 import 'bootswatch/dist/darkly/bootstrap.css';
 import './ListClient.css';
+import { withRouter } from 'react-router-dom';
 
-export default class ListClient extends React.Component {
+class ListClient extends React.Component {
 
     state = {
         cpf: '',
@@ -21,12 +22,26 @@ export default class ListClient extends React.Component {
             }
         }).then(response => {
             // If the response returns a single object, put it in an array so we can use the map function for the results table
-            const results = Array.isArray(response.data) ? response.data : [response.data] ;
+            const results = Array.isArray(response.data) ? response.data : [response.data];
             this.setState({ results });
         }).catch(error => {
             console.error(error.response);
         });
 
+    }
+
+    edit = (cpf) => {
+        this.props.history.push(`/updateClient/${cpf}`);
+    }
+
+    delete = (cpf) => {
+        axios.delete(`${serverURL}/api/person/delete/cpf=${cpf}`)
+            .then(() => {
+                alert(`${cpf} removido`);
+                this.find();
+            }).catch(error => {
+                console.error(error.response);
+            });
     }
 
     render() {
@@ -45,9 +60,15 @@ export default class ListClient extends React.Component {
                         <button type='submit' className="btn btn-success" onClick={this.find}>Buscar</button>
                     </div>
 
-                    <ClientTable clients={this.state.results} />
+                    <ClientTable
+                        clients={this.state.results}
+                        edit={this.edit}
+                        delete={this.delete}
+                    />
                 </header>
             </div>
         );
     }
 }
+
+export default withRouter(ListClient)

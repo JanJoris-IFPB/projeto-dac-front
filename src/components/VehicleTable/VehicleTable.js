@@ -1,4 +1,5 @@
 import React from 'react';
+import 'bootswatch/dist/darkly/bootstrap.css';
 
 export default props => {
 
@@ -9,6 +10,11 @@ export default props => {
                 <td>{vehicle.make}</td>
                 <td>{vehicle.model}</td>
                 <td>{vehicle.color}</td>
+
+                <td>
+                    <button type='submit' className="btn btn-warning" onClick={ () => props.edit(vehicle.plate) }>Editar</button>
+                    <button type='submit' className="btn btn-danger" onClick={ () => props.delete(vehicle.plate) }>Apagar</button>
+                </td>
             </tr>
         );
     })
@@ -21,6 +27,7 @@ export default props => {
                     <th scope="col">Marca</th>
                     <th scope="col">Modelo</th>
                     <th scope="col">Cor</th>
+                    <th scope="col">Opções</th>
                 </tr>
             </thead>
             <tbody>

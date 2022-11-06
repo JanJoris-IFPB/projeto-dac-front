@@ -4,8 +4,9 @@ import { serverURL } from '../../utils/Constants'
 import VehicleTable from '../../components/VehicleTable/VehicleTable';
 import 'bootswatch/dist/darkly/bootstrap.css';
 import './ListVehicle.css';
+import { withRouter } from 'react-router-dom';
 
-export default class ListVehicle extends React.Component {
+class ListVehicle extends React.Component {
 
     state = {
         plate: '',
@@ -28,6 +29,20 @@ export default class ListVehicle extends React.Component {
         });
     }
 
+    edit = (plate) => {
+        this.props.history.push(`/updateVehicle/${plate}`);
+    }
+
+    delete = (plate) => {
+        axios.delete(`${serverURL}/api/vehicle/delete/plate=${plate}`)
+            .then(() => {
+                alert(`Veículo com placa ${plate} removido`);
+                this.find();
+            }).catch(error => {
+                console.error(error.response);
+            });
+    }
+
     render() {
         return (
             <div>
@@ -44,9 +59,15 @@ export default class ListVehicle extends React.Component {
                         <button type='submit' className="btn btn-success" onClick={this.find}>Buscar</button>
                     </div>
 
-                    <VehicleTable vehicles={this.state.results} />
+                    <VehicleTable
+                        vehicles={this.state.results}
+                        edit={this.edit}
+                        delete={this.delete}
+                    />
                 </header>
             </div>
         );
     }
 }
+
+export default withRouter(ListVehicle)

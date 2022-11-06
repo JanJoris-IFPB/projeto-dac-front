@@ -3,9 +3,10 @@ import axios from 'axios';
 import { withRouter } from 'react-router-dom';
 import { serverURL } from '../../utils/Constants'
 import 'bootswatch/dist/darkly/bootstrap.css';
-import './RegisterClient.css';
+import './UpdateClient.css';
 
-class RegisterClient extends React.Component {
+//TODO: Atualizar cliente
+class UpdateClient extends React.Component {
 
     state = {
         cpf: '',
@@ -15,20 +16,15 @@ class RegisterClient extends React.Component {
         age: 0
     }
 
-    onSubmit = () => {
-        axios.post(`${serverURL}/api/person`, {
-            cpf: this.state.cpf,
+    update = () => {
+        axios.put(`${serverURL}/api/person/update/cpf=${this.state.cpf}`, {
             name: this.state.name,
             email: this.state.email,
             phone: this.state.phone,
             age: this.state.age
-        }, {
-            validateStatus: (status) => {
-                return status === 201; // Created
-            }
         }).then(response => {
             const person = response.data;
-            alert(`${person.name} com CPF ${person.cpf} criado(a) com sucesso`);
+            alert(`${person.name} atualizado(a) com sucesso`)
             this.props.history.push("/");
         }).catch(error => {
             console.error(error.response);
@@ -39,16 +35,15 @@ class RegisterClient extends React.Component {
         return (
             <div className="App">
                 <header className="Register-header">
-                    <h1 className='Register-title'>Cadastrar Cliente</h1>
+                    <h1 className='Register-title'>Atualizar Cliente</h1>
 
                     <form className='inputField-container'>
                         <input
                             style={{ marginBottom: '5px' }}
                             type="text"
                             className="form-control"
-                            placeholder="CPF"
-                            id="inputDefault"
-                            onChange={(e) => { this.setState({ cpf: e.target.value }) }}
+                            id="disabledInput"
+                            value={this.state.cpf}
                         />
 
                         <input
@@ -57,6 +52,7 @@ class RegisterClient extends React.Component {
                             className="form-control"
                             placeholder="Nome"
                             id="inputDefault"
+                            value={this.state.name}
                             onChange={(e) => { this.setState({ name: e.target.value }) }}
                         />
 
@@ -66,6 +62,7 @@ class RegisterClient extends React.Component {
                             className="form-control"
                             placeholder="Email"
                             id="inputDefault"
+                            value={this.state.email}
                             onChange={(e) => { this.setState({ email: e.target.value }) }}
                         />
 
@@ -75,6 +72,7 @@ class RegisterClient extends React.Component {
                             className="form-control"
                             placeholder="Phone"
                             id="inputDefault"
+                            value={this.state.phone}
                             onChange={(e) => { this.setState({ phone: e.target.value }) }}
                         />
 
@@ -85,15 +83,16 @@ class RegisterClient extends React.Component {
                             className="form-control"
                             placeholder='0'
                             id="inputDefault"
+                            value={this.state.age}
                             onChange={(e) => { this.setState({ age: e.target.value }) }}
                         />
 
                     </form>
-                    <button type='submit' className="btn btn-success" onClick={this.onSubmit}>Enviar</button>
+                    <button type='submit' className="btn btn-success" onClick={this.update}>Enviar</button>
                 </header>
             </div>
         );
     }
 }
 
-export default withRouter(RegisterClient);
+export default withRouter(UpdateClient)

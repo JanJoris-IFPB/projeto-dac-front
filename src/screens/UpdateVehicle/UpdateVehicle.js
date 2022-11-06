@@ -3,32 +3,26 @@ import axios from 'axios';
 import { withRouter } from 'react-router-dom';
 import { serverURL } from '../../utils/Constants'
 import 'bootswatch/dist/darkly/bootstrap.css';
-import './RegisterClient.css';
+import './UpdateVehicle.css';
 
-class RegisterClient extends React.Component {
+//TODO: Atualizar veículo
+class UpdateVehicle extends React.Component {
 
     state = {
-        cpf: '',
-        name: '',
-        email: '',
-        phone: '',
-        age: 0
+        plate: '',
+        make: '',
+        model: '',
+        color: '',
     }
 
     onSubmit = () => {
-        axios.post(`${serverURL}/api/person`, {
-            cpf: this.state.cpf,
-            name: this.state.name,
-            email: this.state.email,
-            phone: this.state.phone,
-            age: this.state.age
-        }, {
-            validateStatus: (status) => {
-                return status === 201; // Created
-            }
+        axios.put(`${serverURL}/api/vehicle/update/plate=${this.state.plate}`, {
+            make: this.state.make,
+            model: this.state.model,
+            color: this.state.color
         }).then(response => {
-            const person = response.data;
-            alert(`${person.name} com CPF ${person.cpf} criado(a) com sucesso`);
+            const vehicle = response.data;
+            alert(`${vehicle.make} ${vehicle.model} ${vehicle.plate} atualizado com sucesso`);
             this.props.history.push("/");
         }).catch(error => {
             console.error(error.response);
@@ -39,55 +33,47 @@ class RegisterClient extends React.Component {
         return (
             <div className="App">
                 <header className="Register-header">
-                    <h1 className='Register-title'>Cadastrar Cliente</h1>
+                    <h1 className='Register-title'>Atualizar Veículo</h1>
 
                     <form className='inputField-container'>
                         <input
                             style={{ marginBottom: '5px' }}
                             type="text"
                             className="form-control"
-                            placeholder="CPF"
-                            id="inputDefault"
-                            onChange={(e) => { this.setState({ cpf: e.target.value }) }}
+                            placeholder="Placa"
+                            id="disabledInput"
+                            value={this.state.plate}
                         />
 
                         <input
                             style={{ marginBottom: '5px' }}
                             type="text"
                             className="form-control"
-                            placeholder="Nome"
+                            placeholder="Marca"
                             id="inputDefault"
-                            onChange={(e) => { this.setState({ name: e.target.value }) }}
+                            value={this.state.make}
+                            onChange={(e) => { this.setState({ make: e.target.value }) }}
                         />
 
                         <input
                             style={{ marginBottom: '5px' }}
                             type="text"
                             className="form-control"
-                            placeholder="Email"
+                            placeholder="Modelo"
                             id="inputDefault"
-                            onChange={(e) => { this.setState({ email: e.target.value }) }}
+                            value={this.state.model}
+                            onChange={(e) => { this.setState({ model: e.target.value }) }}
                         />
 
                         <input
                             style={{ marginBottom: '5px' }}
                             type="text"
                             className="form-control"
-                            placeholder="Phone"
+                            placeholder="Cor"
                             id="inputDefault"
-                            onChange={(e) => { this.setState({ phone: e.target.value }) }}
+                            value={this.state.color}
+                            onChange={(e) => { this.setState({ color: e.target.value }) }}
                         />
-
-
-                        <input
-                            style={{ marginBottom: '5px' }}
-                            type="number"
-                            className="form-control"
-                            placeholder='0'
-                            id="inputDefault"
-                            onChange={(e) => { this.setState({ age: e.target.value }) }}
-                        />
-
                     </form>
                     <button type='submit' className="btn btn-success" onClick={this.onSubmit}>Enviar</button>
                 </header>
@@ -96,4 +82,4 @@ class RegisterClient extends React.Component {
     }
 }
 
-export default withRouter(RegisterClient);
+export default withRouter(UpdateVehicle)

@@ -1,10 +1,11 @@
 import React from 'react';
 import axios from 'axios';
+import { withRouter } from 'react-router-dom';
 import { serverURL } from '../../utils/Constants'
 import 'bootswatch/dist/darkly/bootstrap.css';
 import './RegisterVehicle.css';
 
-export default class RegisterVehicle extends React.Component {
+class RegisterVehicle extends React.Component {
 
     state = {
         plate: '',
@@ -25,7 +26,8 @@ export default class RegisterVehicle extends React.Component {
             }
         }).then(response => {
             const vehicle = response.data;
-            alert(`${vehicle.make} ${vehicle.model} com placa ${vehicle.plate} cadastrado com sucesso`)
+            alert(`${vehicle.make} ${vehicle.model} com placa ${vehicle.plate} cadastrado com sucesso`);
+            this.props.history.push("/");
         }).catch(error => {
             console.error(error.response);
         });
@@ -80,3 +82,5 @@ export default class RegisterVehicle extends React.Component {
         );
     }
 }
+
+export default withRouter(RegisterVehicle)
