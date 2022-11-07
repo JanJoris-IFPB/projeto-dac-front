@@ -8,3 +8,19 @@
   font-size: calc(10px + 2vmin);
   color: white;
 }
+
+.Search {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  margin-top: 10px;
+  margin-bottom: 5px;
+}
+
+.SearchBox {
+  margin-right: 2.5px;
+}
+
+.SearchButton {
+  margin-left: 2.5px;
+}

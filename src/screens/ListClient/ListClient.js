@@ -48,16 +48,18 @@ class ListClient extends React.Component {
         return (
             <div>
                 <header className="App-header">
-                    <div>
+                    <div className='Search'>
                         <input
-                            style={{ marginBottom: '5px' }}
                             type="text"
-                            className="form-control"
+                            className="form-control SearchBox"
                             placeholder="CPF"
                             id="inputDefault"
                             onChange={(e) => { this.setState({ cpf: e.target.value }) }}
                         />
-                        <button type='submit' className="btn btn-success" onClick={this.find}>Buscar</button>
+                        <button
+                            type='submit'
+                            className="btn btn-success SearchButton"
+                            onClick={this.find}>Buscar</button>
                     </div>
 
                     <ClientTable
