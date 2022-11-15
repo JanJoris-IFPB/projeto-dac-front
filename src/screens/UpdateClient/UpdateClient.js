@@ -16,6 +16,25 @@ class UpdateClient extends React.Component {
         age: 0
     }
 
+    componentDidMount() {
+        const params = this.props.match.params;
+        this.find(params.cpf);
+    }
+
+    find = (cpf) => {
+        axios.get(`${serverURL}/api/person/find/cpf=${cpf}`, {
+            validateStatus: (status) => {
+                return status === 302; // Found
+            }
+        }).then(response => {
+            const { cpf, name, email, phone, age } = response.data;
+            this.setState({ cpf, name, email, phone, age });
+        }).catch(error => {
+            console.error(error.response);
+        });
+
+    }
+
     update = () => {
         axios.put(`${serverURL}/api/person/update/cpf=${this.state.cpf}`, {
             name: this.state.name,
@@ -25,7 +44,7 @@ class UpdateClient extends React.Component {
         }).then(response => {
             const person = response.data;
             alert(`${person.name} atualizado(a) com sucesso`)
-            this.props.history.push("/");
+            this.props.history.push("/listClient");
         }).catch(error => {
             console.error(error.response);
         });

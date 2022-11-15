@@ -15,7 +15,25 @@ class UpdateVehicle extends React.Component {
         color: '',
     }
 
-    onSubmit = () => {
+    componentDidMount() {
+        const params = this.props.match.params;
+        this.find(params.plate);
+    }
+
+    find = (plate) => {
+        axios.get(`${serverURL}/api/vehicle/find/plate=${plate}`, {
+            validateStatus: (status) => {
+                return status === 302; // Found
+            }
+        }).then(response => {
+            const { plate, make, model, color } = response.data;
+            this.setState({ plate, make, model, color });
+        }).catch(error => {
+            console.error(error.response);
+        });
+    }
+
+    update = () => {
         axios.put(`${serverURL}/api/vehicle/update/plate=${this.state.plate}`, {
             make: this.state.make,
             model: this.state.model,
@@ -23,7 +41,7 @@ class UpdateVehicle extends React.Component {
         }).then(response => {
             const vehicle = response.data;
             alert(`${vehicle.make} ${vehicle.model} ${vehicle.plate} atualizado com sucesso`);
-            this.props.history.push("/");
+            this.props.history.push("/listVehicle");
         }).catch(error => {
             console.error(error.response);
         });
@@ -75,7 +93,7 @@ class UpdateVehicle extends React.Component {
                             onChange={(e) => { this.setState({ color: e.target.value }) }}
                         />
                     </form>
-                    <button type='submit' className="btn btn-success" onClick={this.onSubmit}>Enviar</button>
+                    <button type='submit' className="btn btn-success" onClick={this.update}>Enviar</button>
                 </header>
             </div>
         );
