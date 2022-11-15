@@ -1,7 +1,6 @@
 import React from 'react';
-import axios from 'axios';
+import VehicleApiService from '../../services/VehicleApiService'
 import { withRouter } from 'react-router-dom';
-import { serverURL } from '../../utils/Constants'
 import 'bootswatch/dist/darkly/bootstrap.css';
 import './RegisterVehicle.css';
 
@@ -14,16 +13,17 @@ class RegisterVehicle extends React.Component {
         color: '',
     }
 
+    constructor() {
+        super();
+        this.service = new VehicleApiService();
+    }
+
     onSubmit = () => {
-        axios.post(`${serverURL}/api/vehicle`, {
+        this.service.post("", {
             plate: this.state.plate,
             make: this.state.make,
             model: this.state.model,
             color: this.state.color
-        }, {
-            validateStatus: (status) => {
-                return status === 201; // Created
-            }
         }).then(response => {
             const vehicle = response.data;
             alert(`${vehicle.make} ${vehicle.model} com placa ${vehicle.plate} cadastrado com sucesso`);

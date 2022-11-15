@@ -1,11 +1,20 @@
 import React from 'react';
+import NavbarItem from '../NavbarItem/NavbarItem';
 import 'bootswatch/dist/darkly/bootstrap.css';
+import { AuthConsumer } from '../../main/SessionProvider';
 
-export default class Navbar extends React.Component {
+class Navbar extends React.Component {
 
     state = {
+        accountDropdown: false,
         clientDropdown: false,
         vehicleDropdown: false
+    };
+
+    handleAccountDropdown = () => {
+        this.setState(state => {
+            return { accountDropdown: !state.accountDropdown };
+        });
     };
 
     handleClientDropdown = () => {
@@ -39,11 +48,30 @@ export default class Navbar extends React.Component {
                     <div className="collapse navbar-collapse" id="navbarColor01">
                         <ul className="navbar-nav me-auto">
 
-                            <li className="nav-item">
-                                <a className="nav-link" href="/">Tela principal</a>
-                            </li>
+                            <NavbarItem className="nav-item dropdown" render={!this.props.isAuthenticated}>
+                                <a className="nav-link" href="/login">Login</a>
+                            </NavbarItem>
 
-                            <li className="nav-item dropdown">
+                            <NavbarItem className="nav-item dropdown" render={!this.props.isAuthenticated}>
+                                <a className="nav-link" href="/signUp">Cadastrar</a>
+                            </NavbarItem>
+
+                            <NavbarItem className="nav-item dropdown" render={this.props.isAuthenticated}>
+                                <a
+                                    className="nav-link dropdown-toggle"
+                                    data-bs-toggle="dropdown"
+                                    href="#clientDropdown"
+                                    role="button"
+                                    aria-haspopup="true"
+                                    aria-expanded="false"
+                                    onClick={this.handleAccountDropdown}
+                                >Conta</a>
+                                <div className={this.state.accountDropdown ? "dropdown-menu show" : "dropdown-menu"}>
+                                    <a className="dropdown-item" onClick={this.props.logout}>Sair</a>
+                                </div>
+                            </NavbarItem>
+
+                            <NavbarItem className="nav-item dropdown" render={this.props.isAuthenticated}>
                                 <a
                                     className="nav-link dropdown-toggle"
                                     data-bs-toggle="dropdown"
@@ -57,9 +85,9 @@ export default class Navbar extends React.Component {
                                     <a className="dropdown-item" href="/newClient">Cadastrar</a>
                                     <a className="dropdown-item" href="/listClient">Consultar</a>
                                 </div>
-                            </li>
+                            </NavbarItem>
 
-                            <li className="nav-item dropdown">
+                            <NavbarItem className="nav-item dropdown" render={this.props.isAuthenticated}>
                                 <a
                                     className="nav-link dropdown-toggle"
                                     data-bs-toggle="dropdown"
@@ -73,20 +101,29 @@ export default class Navbar extends React.Component {
                                     <a className="dropdown-item" href="/newVehicle">Cadastrar</a>
                                     <a className="dropdown-item" href="/listVehicle">Consultar</a>
                                 </div>
-                            </li>
+                            </NavbarItem>
 
                         </ul>
 
-                        <ul class="navbar-nav ms-md-auto">
-                            <li className='nav-item'></li>
-                            <a className="nav-link" rel='noopener' href="https://github.com/JanJoris-IFPB/projeto-dac-front">Github
-                                <i className="bi bi-github" />
-                            </a>
+                        <ul className="navbar-nav ms-md-auto">
+                            <NavbarItem className="navbar-item" render={true}>
+                                <a className="nav-link" rel='noopener' href="https://github.com/JanJoris-IFPB/projeto-dac-front">Github
+                                    <i className="bi bi-github" />
+                                </a>
+                            </NavbarItem>
                         </ul>
                     </div>
                 </div>
             </nav>
         );
     }
-
 }
+
+// eslint-disable-next-line
+export default () => (
+    <AuthConsumer>
+        {(context) => (
+            <Navbar isAuthenticated={context.isAuthenticated} logout={context.end} />
+        )}
+    </AuthConsumer>
+)

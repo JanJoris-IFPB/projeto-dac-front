@@ -1,7 +1,6 @@
 import React from 'react';
-import axios from 'axios';
+import ClientApiService from '../../services/ClientApiService'
 import { withRouter } from 'react-router-dom';
-import { serverURL } from '../../utils/Constants'
 import 'bootswatch/dist/darkly/bootstrap.css';
 import './RegisterClient.css';
 
@@ -15,17 +14,18 @@ class RegisterClient extends React.Component {
         age: 0
     }
 
+    constructor() {
+        super();
+        this.service = new ClientApiService("/person");
+    }
+
     onSubmit = () => {
-        axios.post(`${serverURL}/api/person`, {
+        this.service.post("", {
             cpf: this.state.cpf,
             name: this.state.name,
             email: this.state.email,
             phone: this.state.phone,
             age: this.state.age
-        }, {
-            validateStatus: (status) => {
-                return status === 201; // Created
-            }
         }).then(response => {
             const person = response.data;
             alert(`${person.name} com CPF ${person.cpf} criado(a) com sucesso`);

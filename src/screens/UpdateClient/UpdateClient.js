@@ -1,7 +1,6 @@
 import React from 'react';
-import axios from 'axios';
+import ClientApiService from '../../services/ClientApiService'
 import { withRouter } from 'react-router-dom';
-import { serverURL } from '../../utils/Constants'
 import 'bootswatch/dist/darkly/bootstrap.css';
 import './UpdateClient.css';
 
@@ -16,17 +15,19 @@ class UpdateClient extends React.Component {
         age: 0
     }
 
+    constructor() {
+        super();
+        this.service = new ClientApiService();
+    }
+
     componentDidMount() {
         const params = this.props.match.params;
         this.find(params.cpf);
     }
 
     find = (cpf) => {
-        axios.get(`${serverURL}/api/person/find/cpf=${cpf}`, {
-            validateStatus: (status) => {
-                return status === 302; // Found
-            }
-        }).then(response => {
+        this.service.get(`/find/cpf=${cpf}`
+        ).then(response => {
             const { cpf, name, email, phone, age } = response.data;
             this.setState({ cpf, name, email, phone, age });
         }).catch(error => {
@@ -36,7 +37,7 @@ class UpdateClient extends React.Component {
     }
 
     update = () => {
-        axios.put(`${serverURL}/api/person/update/cpf=${this.state.cpf}`, {
+        this.service.update(`/update/cpf=${this.state.cpf}`, {
             name: this.state.name,
             email: this.state.email,
             phone: this.state.phone,

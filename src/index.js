@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
+import SessionProvider from './main/SessionProvider';
 import Navbar from './components/Navbar/Navbar';
 import AppRoutes from './main/AppRoutes';
 import reportWebVitals from './reportWebVitals';
@@ -8,8 +9,10 @@ import reportWebVitals from './reportWebVitals';
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <div>
-    <Navbar />
-    <AppRoutes />
+    <SessionProvider>
+      <Navbar />
+      <AppRoutes />
+    </SessionProvider>
   </div>
 );
 

@@ -1,6 +1,5 @@
 import React from 'react';
-import axios from 'axios';
-import { serverURL } from '../../utils/Constants'
+import VehicleApiService from '../../services/VehicleApiService'
 import VehicleTable from '../../components/VehicleTable/VehicleTable';
 import 'bootswatch/dist/darkly/bootstrap.css';
 import './ListVehicle.css';
@@ -13,20 +12,26 @@ class ListVehicle extends React.Component {
         results: []
     }
 
-    find = () => {
-        const params = this.state.plate !== '' ? `find/plate=${this.state.plate}` : 'all';
+    constructor() {
+        super();
+        this.service = new VehicleApiService();
+    }
 
-        axios.get(`${serverURL}/api/vehicle/${params}`, {
-            validateStatus: (status) => {
-                return status === 302; // Found
-            }
-        }).then(response => {
-            // If the response returns a single object, put it in an array so we can use the map function for the results table
-            const results = Array.isArray(response.data) ? response.data : [response.data];
-            this.setState({ results });
-        }).catch(error => {
-            console.error(error.response);
-        });
+    componentDidMount() {
+        this.find();
+    }
+
+    find = () => {
+        const params = this.state.plate !== '' ? `/find/plate=${this.state.plate}` : '/all';
+
+        this.service.get(params)
+            .then(response => {
+                // If the response returns a single object, put it in an array so we can use the map function for the results table
+                const results = Array.isArray(response.data) ? response.data : [response.data];
+                this.setState({ results });
+            }).catch(error => {
+                console.error(error.response);
+            });
     }
 
     edit = (plate) => {
@@ -34,7 +39,7 @@ class ListVehicle extends React.Component {
     }
 
     delete = (plate) => {
-        axios.delete(`${serverURL}/api/vehicle/delete/plate=${plate}`)
+        this.service.delete(`/delete/plate=${plate}`)
             .then(() => {
                 alert(`Veículo com placa ${plate} removido`);
                 this.find();

@@ -1,6 +1,5 @@
 import React from 'react';
-import axios from 'axios';
-import { serverURL } from '../../utils/Constants'
+import ClientApiService from '../../services/ClientApiService'
 import ClientTable from '../../components/ClientTable/ClientTable';
 import 'bootswatch/dist/darkly/bootstrap.css';
 import './ListClient.css';
@@ -13,21 +12,26 @@ class ListClient extends React.Component {
         results: []
     }
 
+    constructor() {
+        super();
+        this.service = new ClientApiService();
+    }
+
+    componentDidMount() {
+        this.find();
+    }
+
     find = () => {
-        const params = this.state.cpf !== '' ? `find/cpf=${this.state.cpf}` : 'all';
+        const params = this.state.cpf !== '' ? `/find/cpf=${this.state.cpf}` : '/all';
 
-        axios.get(`${serverURL}/api/person/${params}`, {
-            validateStatus: (status) => {
-                return status === 302; // Found
-            }
-        }).then(response => {
-            // If the response returns a single object, put it in an array so we can use the map function for the results table
-            const results = Array.isArray(response.data) ? response.data : [response.data];
-            this.setState({ results });
-        }).catch(error => {
-            console.error(error.response);
-        });
-
+        this.service.get(params)
+            .then(response => {
+                // If the response returns a single object, put it in an array so we can use the map function for the results table
+                const results = Array.isArray(response.data) ? response.data : [response.data];
+                this.setState({ results });
+            }).catch(error => {
+                console.error(error.response);
+            });
     }
 
     edit = (cpf) => {
@@ -35,7 +39,7 @@ class ListClient extends React.Component {
     }
 
     delete = (cpf) => {
-        axios.delete(`${serverURL}/api/person/delete/cpf=${cpf}`)
+        this.service.delete(`/delete/cpf=${cpf}`)
             .then(() => {
                 alert(`${cpf} removido`);
                 this.find();
